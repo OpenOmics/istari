@@ -54,3 +54,5 @@ rule somalier_ancestry:
         config['tools']['somalier']
     shell:
         "somalier ancestry --n-pcs=10 -o {output.file} {input.dir}"
+
+# extract first 10 pcs and create covariates file

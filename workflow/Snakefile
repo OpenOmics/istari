@@ -10,17 +10,31 @@ from snakemake.utils import R
 # Local imports
 from scripts.common import (
     allocated,
-    provided, 
+    provided,
     references,
     str_bool
 )
 
-
+# Global workflow variables
+configfile: 'config.json'                      # Generated from user input and config/*.json
+workpath = config['project']['workpath']       # Pipeline's output directory
+samples = [] # list names of samples
 # Final ouput files of the pipeline
+# Rule DAG built from listed here
 rule all:
     input:
-        []
+      input_vcf = config['input']['VCF'],
+      covariates=config['input']['covariates']
+      phenotype=config['input']['covariates']
+    # vcf file containing all variants
+    # phenotype file
+    # for gene-based test maybe variant list?
 
 
-# Import rules 
+# Import rules
 include: join("rules", "common.smk")
+include: join("rules", "somalier.smk")
+include: join("rules", "remove_missing.smk")
+include: join("rules", "vep_slivar.smk")
+
+# extract sites

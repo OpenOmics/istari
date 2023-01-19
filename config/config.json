@@ -1,4 +1,18 @@
 {
+  "project": {
+    "workpath" : "/data/NCBR/projects/NCBR-263/"
+  },
+  "input": {
+    "VCF" : "/data/NCBR/projects/NCBR-263/opencravat/merged_all_renamed.vcf.gz"
+  },
+  "tools": {
+    "somalier" : "/data/GRIS_NCBR/resources/software/somalier/somalier",
+    "slivar": "/data/NCBR/projects/NCBR-263/opencravat/slivar"
+
+  },
+  "slivar": {
+    "binary" :
+  },
     "options": {
     }
 }

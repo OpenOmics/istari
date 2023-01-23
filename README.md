@@ -1,28 +1,28 @@
 <div align="center">
-   
-  <h1>istari 🔬</h1>
-  
-  **_long pipeline name_**
 
-  [![tests](https://github.com/OpenOmics/istari/workflows/tests/badge.svg)](https://github.com/OpenOmics/istari/actions/workflows/main.yaml) [![docs](https://github.com/OpenOmics/istari/workflows/docs/badge.svg)](https://github.com/OpenOmics/istari/actions/workflows/docs.yml) [![GitHub issues](https://img.shields.io/github/issues/OpenOmics/istari?color=brightgreen)](https://github.com/OpenOmics/istari/issues)  [![GitHub license](https://img.shields.io/github/license/OpenOmics/istari)](https://github.com/OpenOmics/istari/blob/main/LICENSE) 
-  
+  <h1>istari 🔬</h1>
+
+  **_An awesome genome-wide_**
+
+  [![tests](https://github.com/OpenOmics/istari/workflows/tests/badge.svg)](https://github.com/OpenOmics/istari/actions/workflows/main.yaml) [![docs](https://github.com/OpenOmics/istari/workflows/docs/badge.svg)](https://github.com/OpenOmics/istari/actions/workflows/docs.yml) [![GitHub issues](https://img.shields.io/github/issues/OpenOmics/istari?color=brightgreen)](https://github.com/OpenOmics/istari/issues)  [![GitHub license](https://img.shields.io/github/license/OpenOmics/istari)](https://github.com/OpenOmics/istari/blob/main/LICENSE)
+
   <i>
-    This is the home of the pipeline, istari. Its long-term goals: to accurately ...insert goal, to infer ..insert goal, and to boldly ..insert goal like no pipeline before!
+    This is the home of the pipeline, istari. Its long-term goals: to perform error-prone data preparation  for whole genome regression modeling using regenie like no pipeline before!
   </i>
 </div>
 
 ## Overview
 Welcome to istari! Before getting started, we highly recommend reading through [istari's documentation](https://openomics.github.io/istari/).
 
-The **`./istari`** pipeline is composed several inter-related sub commands to setup and run the pipeline across different systems. Each of the available sub commands perform different functions: 
+The **`./istari`** pipeline is composed several inter-related sub commands to setup and run the pipeline across different systems. Each of the available sub commands perform different functions:
 
  * [<code>istari <b>run</b></code>](https://openomics.github.io/istari/usage/run/): Run the istari pipeline with your input files.
  * [<code>istari <b>unlock</b></code>](https://openomics.github.io/istari/usage/unlock/): Unlocks a previous runs output directory.
  * [<code>istari <b>cache</b></code>](https://openomics.github.io/istari/usage/cache/): Cache remote resources locally, coming soon!
 
-**istari** is a comprehensive ...insert long description. It relies on technologies like [Singularity<sup>1</sup>](https://singularity.lbl.gov/) to maintain the highest-level of reproducibility. The pipeline consists of a series of data processing and quality-control steps orchestrated by [Snakemake<sup>2</sup>](https://snakemake.readthedocs.io/en/stable/), a flexible and scalable workflow management system, to submit jobs to a cluster.
+**istari** is a comprehensive pipeline that performs error-prone data preparation steps for genome-wide association studies (GWAS) optimized for WES and WGS. It relies on technologies like [Singularity<sup>1</sup>](https://singularity.lbl.gov/) to maintain the highest-level of reproducibility. The pipeline consists of a series of data processing and quality-control steps orchestrated by [Snakemake<sup>2</sup>](https://snakemake.readthedocs.io/en/stable/), a flexible and scalable workflow management system, to submit jobs to a cluster.
 
-The pipeline is compatible with data generated from Illumina short-read sequencing technologies. As input, it accepts a set of FastQ files and can be run locally on a compute instance or on-premise using a cluster. A user can define the method or mode of execution. The pipeline can submit jobs to a cluster using a job scheduler like SLURM (more coming soon!). A hybrid approach ensures the pipeline is accessible to all users.
+The pipeline is compatible with data generated from Illumina short-read sequencing technologies. This pipeline prepares your data including converting file formats, filtering data, and correct preparation of phenotypes, covariates, and regenie step2 files. As input, it accepts a VCF file, phenotype file, and covariate file. The pipeline will validate phenotype and covariate files (e.g. check file format, replace empty values with NA, and add sex and ancestry information to the covariates file). Starting from a jointly-called VCF file, this pipeline performs pre-association testing QC filtering based on MAF, MAC, ld, genotype missingness and sample missingness for regenie step 1. The regenie developers do not recommend to use >1M SNPs for step 1.  By default, certain QC thresholds are set but QC thresholds and pruning settings can be adapted.  The pipeline creates the annotation file, mask file, and list file used as input for gene-based tests in regenie step 2.  The pipeline can submit jobs to a cluster using a job scheduler like SLURM (more coming soon!). A hybrid approach ensures the pipeline is accessible to all users.
 
 Before getting started, we highly recommend reading through the [usage](https://openomics.github.io/istari/usage/run/) section of each available sub command.
 
@@ -31,7 +31,7 @@ For more information about issues or trouble-shooting a problem, please checkout
 ## Dependencies
 **Requires:** `singularity>=3.5`  `snakemake>=6.0`
 
-At the current moment, the pipeline uses a mixture of enviroment modules and docker images; however, this will be changing soon! In the very near future, the pipeline will only use docker images. With that being said, [snakemake](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html) and [singularity](https://singularity.lbl.gov/all-releases) must be installed on the target system. Snakemake orchestrates the execution of each step in the pipeline. To guarantee the highest level of reproducibility, each step of the pipeline will rely on versioned images from [DockerHub](https://hub.docker.com/orgs/nciccbr/repositories). Snakemake uses singularity to pull these images onto the local filesystem prior to job execution, and as so, snakemake and singularity will be the only two dependencies in the future.
+At the current moment, the pipeline uses a mixture of environment modules and docker images; however, this will be changing soon! In the very near future, the pipeline will only use docker images. With that being said, [snakemake](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html) and [singularity](https://singularity.lbl.gov/all-releases) must be installed on the target system. Snakemake orchestrates the execution of each step in the pipeline. To guarantee the highest level of reproducibility, each step of the pipeline will rely on versioned images from [DockerHub](https://hub.docker.com/orgs/nciccbr/repositories). Snakemake uses singularity to pull these images onto the local filesystem prior to job execution, and as so, snakemake and singularity will be the only two dependencies in the future.
 
 ## Installation
 Please clone this repository to your local filesystem using the following command:
@@ -47,7 +47,7 @@ module load snakemake singularity
 ./istari -h
 ```
 
-## Contribute 
+## Contribute
 This site is a living document, created for and by members like you. istari is maintained by the members of OpenOmics and is improved by continous feedback! We encourage you to contribute new content and make improvements to existing content via pull request to our [GitHub repository](https://github.com/OpenOmics/istari).
 
 ## References

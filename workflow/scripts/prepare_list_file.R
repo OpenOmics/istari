@@ -1,3 +1,5 @@
+#!/usr/bin/env Rscript
+
 library(data.table)
 
 #### first set of files 

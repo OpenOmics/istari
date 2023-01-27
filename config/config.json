@@ -1,18 +1,52 @@
-{
-  "project": {
-    "workpath" : "/data/NCBR/projects/NCBR-263/"
+{"workpath" : "/data/NCBR/projects/NCBR-263/",
+  "somalier_output": "/data/NCBR/projects/NCBR-263/somalier_out",
+  "filt_out": "/data/NCBR/projects/NCBR-263/filtering/"
   },
   "input": {
-    "VCF" : "/data/NCBR/projects/NCBR-263/opencravat/merged_all_renamed.vcf.gz"
+    "VCF" : "/data/OpenOmics/istari/.tests/test_input.vcf.gz",
+    "phenoFile" : "/data/OpenOmics/istari/.tests/phenotype.txt",
+    "covarFile" : "/data/OpenOmics/istari/.tests/covariates.txt"
   },
   "tools": {
-    "somalier" : "/data/GRIS_NCBR/resources/software/somalier/somalier",
-    "slivar": "/data/NCBR/projects/NCBR-263/opencravat/slivar"
-
   },
   "slivar": {
-    "binary" :
+    "binary": "/data/NCBR/projects/NCBR-263/opencravat/slivar",
+    "slivar_order": "/data/NCBR/projects/NCBR-263/opencravat/slivar_adjusted_order.txt",
+    "slivar_js": "/data/NCBR/projects/NCBR-263/opencravat/slivar-functions.js",
+
+  },
+  "somalier": {
+    "som_software" : "/data/GRIS_NCBR/resources/software/somalier/somalier",
+    "somalier_sites": "/data/GRIS_NCBR/resources/software/somalier/sites.hg38.vcf.gz",
+    "somalier_labels": "/data/GRIS_NCBR/resources/software/somalier/ancestry-labels-1kg.tsv",
+    "somalier_1kg": "/data/GRIS_NCBR/resources/software/somalier/1kg-somalier/*.somalier"
+
+  },
+  "regenie": {
+    "covar_file" : "/data/NCBR/projects/NCBR-263/regenie_input" #output checked file to other area?
+    "covar_list" : "EV{1:10},Sex,Data"
+    "pheno_file" : "",
+    "pheno_list" : "BrainDamage_Severity,CombiWISE_Severity,SC_severity,MSDSS",
+    "annotation_file" :"", #File with variant annotations for each set
+    "list_file": "", #File listing variant sets
+    "mask_file": "", #File with mask definitions using the annotations defined in annotation_file
+    "step2_test": "--vc-tests skat,skato",
+    "step2_build": "--build-mask sum",
+    "step2_minMAC": "--min-MAC 1",
+    "step2_bsize": "200",
+
+  },
+  "QC": {
+    "max_nocall": "0.5",
+    "geno": "0.2",
+    "maf": "0.05",
+    "mac": "20",
+    "ld_window": "50",
+    "ld_step": "5",
+    "ld_thresh": "0.5"
   },
     "options": {
+    "gnomad_af1": "0.01",
+    "gnomad_af2": "0.05"
     }
 }

@@ -13,14 +13,14 @@ rule somalier_extract:
         Somalier file for each sample
     """
     input:
-        vcf=config['input']['VCF'],
+        vcf=config['input']['VCF']
     output:
-        files=join(somalier_output, "sites", "{sample}.somalier"),
+        files=join(somalier_output, "sites", "{sample}.somalier")
     params:
         ref=config['references']['GENOME'],
-        sites=config['somalier']['somalier_sites'],
+        sites=config['somalier']['somalier_sites']
     envmodules:
-        config['somalier']['som_software'],
+        config['somalier']['som_software']
     shell:
     """
     somalier extract -d {output.files} --sites {params.sites} -f {params.ref} {input.vcf}
@@ -35,11 +35,11 @@ rule somalier_relate
         Text and interactive HTML output.
     """
     input:
-        sites = join(somalier_output, "sites", "{sample}.somalier"),
+        sites = join(somalier_output, "sites", "{sample}.somalier")
     envmodules:
-        config['somalier']['som_software'],
+        config['somalier']['som_software']
     output:
-        file = join(somalier_output,"somalier_relate"),
+        file = join(somalier_output,"somalier_relate")
     shell:
     """
     somalier relate -i -o {output.file} {input.sites}
@@ -54,11 +54,11 @@ rule somalier_ancestry:
             This command will create an html output along with a text file of the predictions.
     """
     input:
-        dir= join(somalier_output, "sites", "{sample}.somalier"),
+        dir= join(somalier_output, "sites", "{sample}.somalier")
     output:
-        file = join(somalier_output,"somalier_ancestry"),
+        file = join(somalier_output,"somalier_ancestry")
     params:
-        ref=config['somalier']['somalier_1kg'],
+        ref=config['somalier']['somalier_1kg']
     envmodules:
         config['somalier']['som_software']
     shell:
@@ -75,7 +75,7 @@ rule covar_file
         Updated covariate file with sex and ancestry information
     """
     input:
-        sex = join(somalier_out,"somalier_relate.samples.tsv")
+        sex = join(somalier_out,"somalier_relate.samples.tsv"),
         ancestry = join(somalier_out, "/somalier_ancestry.somalier-ancestry.tsv"),
         covariates = config['input']['covarFile']
     shell:

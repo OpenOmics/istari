@@ -5,7 +5,6 @@ import os, sys
 
 # 3rd party imports from pypi
 from snakemake.workflow import workflow as wf_api
-from snakemake.utils import R
 
 # Local imports
 from scripts.common import (
@@ -17,24 +16,34 @@ from scripts.common import (
 
 # Global workflow variables
 configfile: 'config.json'                      # Generated from user input and config/*.json
-samples = [] # list names of samples
+input_vcf  = config['options']['gvcf']
+covariates = config['options']['covariates']
+phenotype  = config['options']['phenotypes']
+workpath   = config['options']['output']
+SAMPLES    = []
+with open(covariates, 'r') as fh:
+    header = next(fh)
+    for line in fh:
+        sample = line.strip().split('\t')[0]
+        SAMPLES.append(sample)
+
 # Final ouput files of the pipeline
 # Rule DAG built from listed here
 rule all:
     input:
-      input_vcf = config['input']['VCF'],
-      covariates =config['input']['covarFile']
-      phenotype =config['input']['phenoFile']
-    # vcf file containing all variants
-    # phenotype file
-    # covariate file
-
+        # Somalier extract
+        expand(join(workpath, "somalier_output", "sites", "{sample}.somalier"), sample=SAMPLES),
+        # Somalier relate
+        join(workpath, "somalier_output", "somalier_relate.samples.tsv"),
+        # Somalier ancestry
+        join(workpath, "somalier_output", "somalier_ancestry.somalier-ancestry.tsv"),
+        # Covariates
+        join(workpath,"regenie", "covariates.txt"),
 
 # Import rules
-include: join("rules", "common.smk")
-include: join("rules", "somalier.smk")
-include: join("rules", "vep_slivar.smk")
-include: join("rules", "filtering.smk")
-include: join("rules", "regenie.smk")
+include: join(workpath, "workflow", "rules", "somalier.smk")
+#include: join("rules", "vep_slivar.smk")
+#include: join("rules", "filtering.smk")
+#include: join("rules", "regenie.smk")
 
 # extract sites

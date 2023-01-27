@@ -1,6 +1,6 @@
 {
     "references": {
       "GENOME": "/data/NCBR/references/human/hg38_plus/Homo_sapiens_assembly38_plus.fasta",
-      "vep_assembly": "GRCh38",
+      "vep_assembly": "GRCh38"
     }
 }

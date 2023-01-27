@@ -1,7 +1,4 @@
-# rules for annotation using VEP and slivar to subset
-import os
-from os.path import join
-import pandas as pd
+# rules for annotation using VEP and slivar to subset and creating mask, list, and annotation files for gene-based tests in regenie
 
 rule vep:
     """
@@ -12,12 +9,12 @@ rule vep:
     input:
         vcf = config['input']['VCF']
     output:
-        vep_vcf=join(filt_out, "cleaned.vcf.gz"),
-        vep_vci=join(filt_out, "vep.vcf.gz.tbi")
+        vep_vcf=join(workpath,"annotate", "cleaned.vcf.gz"),
+        vep_vci=join(workpath,"annotate", "vep.vcf.gz.tbi")
     params:
         vep_assembly = config['references']['vep_assembly'],
         ref = config['references']['GENOME'],
-        unzipped_vcf = temp(join(filt_out, "vep.vcf"))
+        unzipped_vcf = temp(join(workpath,"annotate", "vep.vcf"))
    shell:
       """
       set +u
@@ -75,6 +72,7 @@ rule slivar_05:
       bgzip -c {output.unzipped_vcf} > {output.slivar_vcf}
       tabix -p vcf {output.slivar_vcf}
       """
+
 rule prep_annot_files:
     """ Removes variants not within genes in annotation file
     """
@@ -84,16 +82,13 @@ rule prep_annot_files:
     output:
         out1 = join(workpath,"regenie", 'af' + config['options']['gnomad_af1'] + ".annot"),
         out2 = join(workpath,"regenie", 'af' + config['options']['gnomad_af2'] + ".annot")
-    params:
-        outdir_regenie=join(workpath,"regenie")
- shell:
-    """
-    mkdir -p {params.outdir_regenie}
-    awk -F'\t' '!($2 == ".")' {input.slivar_annot1} > {output.out1}
-    awk -F'\t' '!($2 == ".")' {input.slivar_annot2} > {output.out2}
-    dos2unix {output.out1}
-    dos2unix {output.out2}
-    """
+    shell:
+        """
+        awk -F'\t' '!($2 == ".")' {input.slivar_annot1} > {output.out1}
+        awk -F'\t' '!($2 == ".")' {input.slivar_annot2} > {output.out2}
+        dos2unix {output.out1}
+        dos2unix {output.out2}
+        """
 
 rule prep_mask_list_files:
     """ Creates list file and mask file from annotation file for regenie inputs

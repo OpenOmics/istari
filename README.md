@@ -2,12 +2,12 @@
 
   <h1>istari 🔬</h1>
 
-  **_An awesome genome-wide_**
+  **_An awesome whole genome regression modeling pipeline_**
 
   [![tests](https://github.com/OpenOmics/istari/workflows/tests/badge.svg)](https://github.com/OpenOmics/istari/actions/workflows/main.yaml) [![docs](https://github.com/OpenOmics/istari/workflows/docs/badge.svg)](https://github.com/OpenOmics/istari/actions/workflows/docs.yml) [![GitHub issues](https://img.shields.io/github/issues/OpenOmics/istari?color=brightgreen)](https://github.com/OpenOmics/istari/issues)  [![GitHub license](https://img.shields.io/github/license/OpenOmics/istari)](https://github.com/OpenOmics/istari/blob/main/LICENSE)
 
   <i>
-    This is the home of the pipeline, istari. Its long-term goals: to perform error-prone data preparation  for whole genome regression modeling using regenie like no pipeline before!
+    This is the home of the pipeline, istari. Its long-term goals: to perform error-prone data preparation for whole genome regression modeling using regenie like no pipeline before!
   </i>
 </div>
 

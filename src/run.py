@@ -88,7 +88,7 @@ def sym_safe(input_data, target):
     input_fastqs = [] # store renamed fastq file names
     for file in input_data:
         filename = os.path.basename(file)
-        renamed = os.path.join(target, rename(filename))
+        renamed = os.path.join(target, filename)
         input_fastqs.append(renamed)
 
         if not exists(renamed):
@@ -431,7 +431,7 @@ def add_sample_metadata(input_files, config, group=None):
     config['samples'] = []
     for file in input_files:
         # Split sample name on file extension
-        sample = re.split('\.R[12]\.fastq\.gz', os.path.basename(file))[0]
+        sample = re.split('\.(g)?vcf\.gz', os.path.basename(file))[0]
         if sample not in added:
             # Only add PE sample information once
             added.append(sample)
@@ -455,14 +455,7 @@ def add_rawdata_information(sub_args, config, ifiles):
          Updated config dictionary containing user information (username and home directory)
     """
 
-    # Determine whether dataset is paired-end
-    # or single-end
-    # Updates config['project']['nends'] where
-    # 1 = single-end, 2 = paired-end, -1 = bams
-    convert = {1: 'single-end', 2: 'paired-end', -1: 'bam'}
-    nends = get_nends(ifiles)  # Checks PE data for both mates (R1 and R2)
-    config['project']['nends'] = nends
-    config['project']['filetype'] = convert[nends]
+    config['project']['filetype'] = 'gvcf'
 
     # Finds the set of rawdata directories to bind
     rawdata_paths = get_rawdata_bind_paths(input_files = sub_args.input)

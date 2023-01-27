@@ -10,14 +10,14 @@ rule vep:
     @Output: VEP and HTML output
     """
     input:
-        vcf = config['input']['VCF'],
+        vcf = config['input']['VCF']
     output:
         vep_vcf=join(filt_out, "cleaned.vcf.gz"),
         vep_vci=join(filt_out, "vep.vcf.gz.tbi")
     params:
         vep_assembly = config['references']['vep_assembly'],
         ref = config['references']['GENOME'],
-        unzipped_vcf = temp(join(filt_out, "vep.vcf")),
+        unzipped_vcf = temp(join(filt_out, "vep.vcf"))
    shell:
       """
       set +u
@@ -29,17 +29,17 @@ rule vep:
 
 rule slivar_01:
     input:
-        vep_vcf = join(filt_out, "vep.vcf.gz"),
+        vep_vcf = join(filt_out, "vep.vcf.gz")
     output:
         unzipped_vcf = join(filt_out, 'slivar' + 'af' + config['options']['gnomad_af2'] + ".vcf"),
         slivar_vcf = join(filt_out,'slivar' + 'af' + config['options']['gnomad_af1'] + ".vcf.gz"),
-        slivar_annot= join(filt_out, 'slivar' + 'af' + config['options']['gnomad_af1'] + ".txt"),
+        slivar_annot= join(filt_out, 'slivar' + 'af' + config['options']['gnomad_af1'] + ".txt")
     params:
         genome = config['references']['GENOME'],
         slivar_order = config['slivar']['slivar_order'],
         slivar_tool = config['sliver']['binary'],
         slivar_js = config['sliver']['slivar_js'],
-        gnomad_af = config['options']['gnomad_af1'],
+        gnomad_af = config['options']['gnomad_af1']
    shell:
       """
       set +u
@@ -53,18 +53,18 @@ rule slivar_01:
 
 rule slivar_05:
     input:
-        vep_vcf = join(filt_out, "vep.vcf.gz"),
+        vep_vcf = join(filt_out, "vep.vcf.gz")
     output:
         unzipped_vcf = join(filt_out, 'slivar' + 'af' + config['options']['gnomad_af2'] + ".vcf"),
         slivar_vcf = join(filt_out, 'slivar' + 'af' + config['options']['gnomad_af2'] + ".vcf.gz"),
         slivar_vci = join(filt_out, 'slivar' + 'af' + config['options']['gnomad_af2'] + ".vcf.gz.tbi"),
-        slivar_annot= join(filt_out, 'slivar' + 'af' + config['options']['gnomad_af2'] + ".txt"),
+        slivar_annot= join(filt_out, 'slivar' + 'af' + config['options']['gnomad_af2'] + ".txt")
     params:
         genome = config['references']['GENOME'],
         slivar_order = config['slivar']['slivar_order'],
         slivar_tool = config['sliver']['binary'],
         slivar_js = config['sliver']['slivar_js'],
-        gnomad_af = config['options']['gnomad_af2'],
+        gnomad_af = config['options']['gnomad_af2']
    shell:
       """
       set +u
@@ -80,12 +80,12 @@ rule prep_annot_files:
     """
     input:
         slivar_annot1= join(filt_out, 'slivar' + 'af' + config['options']['gnomad_af1'] + ".txt"),
-        slivar_annot2= join(filt_out, 'slivar' + 'af' + config['options']['gnomad_af2'] + ".txt"),
+        slivar_annot2= join(filt_out, 'slivar' + 'af' + config['options']['gnomad_af2'] + ".txt")
     output:
         out1 = join(workpath,"regenie", 'af' + config['options']['gnomad_af1'] + ".annot"),
         out2 = join(workpath,"regenie", 'af' + config['options']['gnomad_af2'] + ".annot")
     params:
-        outdir_regenie=join(workpath,"regenie"),
+        outdir_regenie=join(workpath,"regenie")
  shell:
     """
     mkdir -p {params.outdir_regenie}

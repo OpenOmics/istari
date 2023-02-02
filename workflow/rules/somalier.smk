@@ -60,12 +60,14 @@ rule extract_info:
         outdir_QC=join(workpath,"QC")
     output:
         reg_covariates = join(workpath,"regenie", "covariates.txt"),
-        sex_file = join(workpath,"QC", "sex_file.txt")
+        sex_file = join(workpath,"QC", "sex_file.txt"),
+        subset = join(workpath, "somalier", "sub_ancestry_somalier.tsv")
     shell:
         """
         mkdir -p {params.outdir_regenie}
         mkdir -p {params.outdir_QC}
         paste -d '\t' <(cut -f 1,2 {input.covariates}) <(cut -f 5 {input.sex}) > {output.sex_file}
-        paste -d '\t' <(cut -f 1,2 {input.covariates}) <(cut -f 5 {input.sex}) <(cut -f 9- {input.ancestry} | grep P0) > {output.reg_covariates}
+        awk '/P00/' {input.ancestry} > {output.subset}
+        paste -d '\t' <(cut -f 1,2 {input.covariates}) <(cut -f 5 {input.sex}) <(cut -f 9- {output.subset}) > {output.reg_covariates}
         """
 

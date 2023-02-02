@@ -34,8 +34,8 @@ rule somalier:
         {params.exe} ancestry --n-pcs=10 -o {params.outdir}/ancestry --labels {params.ancestry_data}/ancestry-labels-1kg.tsv {params.ancestry_data}/*.somalier ++ {output.somalier} || {{
     # Somalier ancestry error,
     # usually due to not finding
-    # any sites compared to the 
-    # its references, expected 
+    # any sites compared to the
+    # its references, expected
     # with sub-sampled datasets
     echo "WARNING: Somalier ancestry failed..." 1>&2
     touch {output.ancestry}
@@ -67,7 +67,7 @@ rule extract_info:
         mkdir -p {params.outdir_regenie}
         mkdir -p {params.outdir_QC}
         paste -d '\t' <(cut -f 1,2 {input.covariates}) <(cut -f 5 {input.sex}) > {output.sex_file}
-        awk '/P00/' {input.ancestry} > {output.subset}
+        head -n 1 {input.ancestry} > {output.subset}
+        awk '/P00/' {input.ancestry} >> {output.subset}
         paste -d '\t' <(cut -f 1,2 {input.covariates}) <(cut -f 5 {input.sex}) <(cut -f 9- {output.subset}) > {output.reg_covariates}
         """
-

@@ -1,7 +1,7 @@
 # rules for running Somalier to get sex and ancestry and adding this information to the covariates file.
 # Sex and first 10 PCs are used as covariates in regenie.
-
-rule somalier_extract:
+# # you will need an indexed vcf file for this command
+rule somalier:
     """
     This takes a VCF file and extracts genotype-like information at selected sites
     Note that you can also use a BAM file as input. Please see https://github.com/brentp/somalier for more details
@@ -14,60 +14,35 @@ rule somalier_extract:
     input:
         vcf=input_vcf,
     output:
-        files=expand(join(workpath, "somalier_output", "sites", "{sample}.somalier"), sample=SAMPLES)
+        somalier = expand(join(workpath, "somalier", "{sample}.somalier"), sample=SAMPLES),
+        related = join(workpath, "somalier", "relatedness.samples.tsv"),
+        ancestry = join(workpath, "somalier", "ancestry.somalier-ancestry.tsv"),
     params:
-        ref=config['references']['GENOME'],
-        sites=config['somalier']['somalier_sites'],
-        exe=config['somalier']['som_software'],
+        rname = "somalier",
+        outdir = join(workpath, "somalier"),
+        ref = config['references']['GENOME'],
+        sites = config['somalier']['somalier_sites'],
+        ancestry_data=config['somalier']['ancestry_db'],
+        exe = config['somalier']['exe'],
     shell:
         """
-        {params.exe} extract -d {output.files} --sites {params.sites} -f {params.ref} {input.vcf}
+        echo "Extracting sites to estimate ancestry."
+        {params.exe} extract -d {params.outdir}/ --sites {params.sites} -f {params.ref} {input.vcf}
+        echo "Estimating relatedness."
+        {params.exe} relate --infer -i -o {params.outdir}/relatedness {output.somalier}
+        echo "Estimating ancestry."
+        {params.exe} ancestry --n-pcs=10 -o {params.outdir}/ancestry --labels {params.ancestry_data}/ancestry-labels-1kg.tsv {params.ancestry_data}/*.somalier ++ {output.somalier} || {{
+    # Somalier ancestry error,
+    # usually due to not finding
+    # any sites compared to the 
+    # its references, expected 
+    # with sub-sampled datasets
+    echo "WARNING: Somalier ancestry failed..." 1>&2
+    touch {output.ancestry}
+    }}
         """
 
-
-rule somalier_relate:
-    """
-    Calculate relatedness on the extracted data. This will give you sex information for individuals.
-    @Input:
-        Somalier *sites files from somalier_extract
-    @Output:
-        Text and interactive HTML output.
-    """
-    input:
-        sites = expand(join(workpath, "somalier_output", "sites", "{sample}.somalier"), sample=SAMPLES)
-    output:
-        file = join(workpath, "somalier_output", "somalier_relate.samples.tsv")
-    params:
-        exe=config['somalier']['som_software'],
-        prefix=join(workpath, "somalier_output", "somalier_relate")
-    shell:
-        """
-        {params.exe} relate -i -o {params.prefix} {input.sites}
-        """
-
-
-rule somalier_ancestry:
-    """
-    Perform ancestry prediction on a set of samples, given a set of labeled samples
-        @Input:
-            A set of labelled samples
-        @Output:
-            This command will create an html output along with a text file of the predictions.
-    """
-    input:
-        dir= expand(join(workpath, "somalier_output", "sites", "{sample}.somalier"), sample=SAMPLES)
-    output:
-        file = join(workpath, "somalier_output", "somalier_ancestry.somalier-ancestry.tsv")
-    params:
-        ref=config['somalier']['somalier_1kg'],
-        exe=config['somalier']['som_software'],
-        prefix=join(workpath, "somalier_output", "somalier_ancestry")
-    shell:
-        """
-        {params.exe} ancestry --n-pcs=10 -o {params.prefix} --labels {params.ref} ++ {input.dir}
-        """
-
-rule covar_file:
+rule extract_info:
     """
     Extract sex and ancestry PCS and add to covariate file for regenie.
     @Input:
@@ -76,18 +51,21 @@ rule covar_file:
         Updated covariate file with sex and ancestry information
     """
     input:
-        sex = join(workpath, "somalier_output","somalier_relate.samples.tsv"),
-        ancestry = join(workpath, "somalier_output", "somalier_ancestry.somalier-ancestry.tsv"),
+        sex = join(workpath, "somalier","relatedness.samples.tsv"),
+        ancestry = join(workpath, "somalier", "ancestry.somalier-ancestry.tsv"),
         covariates = covariates,
     params:
-        outdir_regenie=join(workpath,"regenie")
+        rname = "extract_info",
+        outdir_regenie=join(workpath,"regenie"),
+        outdir_QC=join(workpath,"QC")
     output:
-        reg_covariates = join(workpath,"regenie", "covariates.txt")
+        reg_covariates = join(workpath,"regenie", "covariates.txt"),
+        sex_file = join(workpath,"QC", "sex_file.txt")
     shell:
         """
         mkdir -p {params.outdir_regenie}
-        dos2unix {input.covariates}
-        dos2unix {input.sex}
-        dos2unix {input.ancestry}
-        paste -d '\t' <(cut -f 1,2 {input.covariates}) <(cut -f 5 {input.sex}) <(cut -f 9- {input.ancestry}) > {output.reg_covariates}
+        mkdir -p {params.outdir_QC}
+        paste -d '\t' <(cut -f 1,2 {input.covariates}) <(cut -f 5 {input.sex}) > {output.sex_file}
+        paste -d '\t' <(cut -f 1,2 {input.covariates}) <(cut -f 5 {input.sex}) <(cut -f 9- {input.ancestry} | grep P0) > {output.reg_covariates}
         """
+

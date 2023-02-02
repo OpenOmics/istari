@@ -1,7 +1,0 @@
-name: regenie_env
-channels:
-  - conda-forge
-  - bioconda
-  - defaults
-dependencies:
-  - regenie=3.1.3=h2b233e7_0

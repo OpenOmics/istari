@@ -1,0 +1,13 @@
+{
+    "__default__": {
+        "threads": "4",
+        "mem": "32g",
+        "partition": "norm",
+        "time": "0-04:00:00",
+        "gres": "lscratch:32"
+    },
+    "somalier": {
+        "time": "12:00:00"
+    }
+
+}

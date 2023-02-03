@@ -21,7 +21,6 @@ rule GATK:
         filt_nocall = config['QC']['GATK_filters']['max_nocall'],
     shell:
         """
-        mkdir -p {params.outdir}
         set +u
         module load GATK
         gatk SelectVariants -V {input.vcf} -O {output.unzipped_vcf} -R {params.ref} --max-nocall-fraction {params.filt_nocall}

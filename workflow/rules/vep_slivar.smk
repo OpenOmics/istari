@@ -2,13 +2,15 @@
 
 rule vep:
     """
-    Takes vcf file and annotates using VEP
+    Takes vcf file, filter out anything
+    but biallelic SNPs and annotates using VEP
     @Input: multi-sample jointly-called VCF file
     @Output: VEP and HTML output
     """
     input:
         vcf = input_vcf
     output:
+        sub = join(workpath, "vep", "2alleles.vcf.gz")
         vep_vcf=join(workpath,"vep", "vep.vcf.gz"),
         vep_vci=join(workpath,"vep", "vep.vcf.gz.tbi")
     params:
@@ -18,10 +20,12 @@ rule vep:
         ref = config['references']['GENOME'],
     shell:
         """
+        module load bcftools
+        bcftools view --max-alleles 2 {input.vcf} > {output.sub}
         mkdir -p {params.outdir}
         set +u
         module load VEP
-        vep -i {input.vcf} -o {output.vep_vcf} --force_overwrite --fork 12 --fasta {params.ref} --species human --assembly {params.vep_assembly} --cache --dir_cache $VEP_CACHEDIR --offline --format vcf --compress_output bgzip --everything --pick --vcf
+        vep -i {output.sub} -o {output.vep_vcf} --force_overwrite --fork 12 --fasta {params.ref} --species human --assembly {params.vep_assembly} --cache --dir_cache $VEP_CACHEDIR --offline --format vcf --compress_output bgzip --everything --pick --vcf
         module load bcftools
         tabix -p vcf {output.vep_vcf}
         """

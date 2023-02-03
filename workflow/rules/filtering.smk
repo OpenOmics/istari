@@ -40,8 +40,8 @@ rule plink:
     """
     input:
         cleaned_vcf = join(workpath, "QC", "cleaned.vcf.gz"),
-        plink_01 = join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af1'] + '.bed'),
-        plink_05 = join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af2'] + '.bed')
+        plink_01 = join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af1']),
+        plink_05 = join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af2'])
     params:
         rname = "plink",
         geno = config['QC']['plink_filters']['geno'],
@@ -53,10 +53,10 @@ rule plink:
         ld_thresh = config['QC']['plink_filters']['ld_thresh'],
         mac = config['QC']['plink_filters']['mac']
     output:
-        plink1 = join(workpath, "QC",'geno' + config['QC']['plink_filters']['geno'] + 'maf' + config['QC']['plink_filters']['maf'] + '.bed'),
-        filtered = join(workpath, "regenie", 'filtered.bed'),
-        step2_01 = join(workpath, "regenie", config['slivar']['gnomad_af1'] + '.bed'),
-        step2_05 = join(workpath, "regenie", config['slivar']['gnomad_af2'] + '.bed')
+        plink1 = join(workpath, "QC",'geno' + config['QC']['plink_filters']['geno'] + 'maf' + config['QC']['plink_filters']['maf']),
+        filtered = join(workpath, "regenie", 'filtered'),
+        step2_01 = join(workpath, "regenie", config['slivar']['gnomad_af1']),
+        step2_05 = join(workpath, "regenie", config['slivar']['gnomad_af2'])
 
     shell:
         """
@@ -67,7 +67,5 @@ rule plink:
         plink2 --bfile ld_filt --exclude ld_filt.prune.out --mac {params.mac} --make-bed --out {output.filtered}
         ml plink/1
         plink --bfile {output.filtered} --bmerge {input.plink_01} --make-bed --out {output.step2_01} --update-sex {params.sex}
-        plink --bfile {output.filtered} --bmerge {input.plink_05} --make-bed --out {output.step2_05} --update-sex {params.sex}  
+        plink --bfile {output.filtered} --bmerge {input.plink_05} --make-bed --out {output.step2_05} --update-sex {params.sex}
         """
-
-    

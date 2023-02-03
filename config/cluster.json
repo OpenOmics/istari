@@ -14,6 +14,16 @@
       "mem": "6g",
       "time": "18:00:00"
     },
+    "slivar_01": {
+      "threads": "32",
+      "mem": "6g",
+      "time": "18:00:00"
+    },
+    "slivar_05": {
+      "threads": "32",
+      "mem": "6g",
+      "time": "18:00:00"
+    },
     "GATK": {
     "threads": "4",
     "mem": "48g",

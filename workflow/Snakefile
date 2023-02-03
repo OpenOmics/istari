@@ -46,10 +46,10 @@ rule all:
         join(workpath, "slivar",'slivar' + config['slivar']['gnomad_af1'] + ".vcf.gz"),
         join(workpath, "slivar", 'slivar'  + config['slivar']['gnomad_af1'] + ".vcf.gz.tbi"),
         join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af1'] + ".txt"),
-        join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af1'] + '.bed'),
+        join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af1']),
         join(workpath, "slivar",'slivar' + config['slivar']['gnomad_af2'] + ".vcf.gz"),
         join(workpath, "slivar", 'slivar'  + config['slivar']['gnomad_af2'] + ".vcf.gz.tbi"),
-        join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af2'] + '.bed'),
+        join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af2']),
         join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af2'] + ".txt"),
         # prep annotation, list, and mask files for regenie
         join(workpath,"regenie", config['slivar']['gnomad_af1'] + ".annot"),

@@ -34,7 +34,7 @@ rule slivar_01:
         slivar_vcf = join(workpath, "slivar",'slivar' + config['slivar']['gnomad_af1'] + ".vcf.gz"),
         slivar_vci = join(workpath, "slivar", 'slivar'  + config['slivar']['gnomad_af1'] + ".vcf.gz.tbi"),
         slivar_annot= join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af1'] + ".txt"),
-        plink_out = join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af1'] + '.bed')
+        plink_out = join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af1'])
     params:
         rname = "slivar_01",
         outdir = join(workpath,"slivar"),
@@ -66,7 +66,7 @@ rule slivar_05:
         slivar_vcf = join(workpath, "slivar",'slivar' + config['slivar']['gnomad_af2'] + ".vcf.gz"),
         slivar_vci = join(workpath, "slivar", 'slivar'  + config['slivar']['gnomad_af2'] + ".vcf.gz.tbi"),
         slivar_annot= join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af2'] + ".txt"),
-        plink_out = join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af2'] + '.bed')
+        plink_out = join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af2'])
     params:
         rname = "slivar_05",
         outdir = join(workpath,"slivar"),

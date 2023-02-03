@@ -38,6 +38,7 @@ rule slivar_01:
     params:
         rname = "slivar_01",
         outdir = join(workpath,"slivar"),
+        gnomad_db = config['slivar']['gnomad_db'],
         genome = config['references']['GENOME'],
         slivar_order = config['slivar']['slivar_order'],
         slivar_tool = config['slivar']['binary'],
@@ -48,7 +49,7 @@ rule slivar_01:
         mkdir -p {params.outdir}
         set +u
         SLIVAR_IMPACTFUL_ORDER={params.slivar_order}
-        {params.slivar_tool} expr --js {params.slivar_js} -g {params.gnomad_af} --vcf {input.vep_vcf} --info "INFO.gnomad_popmax_af < {params.gnomad_af} && INFO.impactful" --pass-only > {output.unzipped_vcf}
+        {params.slivar_tool} expr --js {params.slivar_js} -g {params.gnomad_db} --vcf {input.vep_vcf} --info "INFO.gnomad_popmax_af < {params.gnomad_af} && INFO.impactful" --pass-only > {output.unzipped_vcf}
         module load plink/2
         plink2 --make-bed --max-alleles 2 --out {output.plink_out} --rm-dup force-first --set-missing-var-ids @:# --vcf {output.unzipped_vcf} --vcf-half-call m
         module load bcftools
@@ -69,6 +70,7 @@ rule slivar_05:
     params:
         rname = "slivar_05",
         outdir = join(workpath,"slivar"),
+        gnomad_db = config['slivar']['gnomad_db'],
         genome = config['references']['GENOME'],
         slivar_order = config['slivar']['slivar_order'],
         slivar_tool = config['slivar']['binary'],
@@ -79,7 +81,7 @@ rule slivar_05:
         mkdir -p {params.outdir}
         set +u
         SLIVAR_IMPACTFUL_ORDER={params.slivar_order}
-        {params.slivar_tool} expr --js {params.slivar_js} -g {params.gnomad_af} --vcf {input.vep_vcf} --info "INFO.gnomad_popmax_af < {params.gnomad_af} && INFO.impactful" --pass-only > {output.unzipped_vcf}
+        {params.slivar_tool} expr --js {params.slivar_js} -g {params.gnomad_db} --vcf {input.vep_vcf} --info "INFO.gnomad_popmax_af < {params.gnomad_af} && INFO.impactful" --pass-only > {output.unzipped_vcf}
         module load plink/2
         plink2 --make-bed --max-alleles 2 --out {output.plink_out} --rm-dup force-first --set-missing-var-ids @:# --vcf {output.unzipped_vcf} --vcf-half-call m
         module load bcftools
@@ -87,7 +89,7 @@ rule slivar_05:
         bgzip -c {output.unzipped_vcf} > {output.slivar_vcf}
         tabix -p vcf {output.slivar_vcf}
         """
-    
+
 rule prep_annot_files:
     """ Removes variants not within genes in annotation file
     """

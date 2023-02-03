@@ -9,6 +9,7 @@
 		"binary": "/data/NCBR/projects/NCBR-263/opencravat/slivar",
 		"slivar_order": "/data/NCBR/projects/NCBR-263/opencravat/slivar_adjusted_order.txt",
 		"slivar_js": "/data/NCBR/projects/NCBR-263/opencravat/slivar-functions.js",
+		"gnomad_db": "/data/NCBR/projects/NCBR-263/opencravat/gnomad.hg38.genomes.v3.fix.zip",
 		"gnomad_af1": "0.01",
 		"gnomad_af2": "0.05"
 

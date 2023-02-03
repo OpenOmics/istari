@@ -10,7 +10,7 @@ rule vep:
     input:
         vcf = input_vcf
     output:
-        sub = join(workpath, "vep", "2alleles.vcf.gz")
+        sub = join(workpath, "vep", "2alleles.vcf.gz"),
         vep_vcf=join(workpath,"vep", "vep.vcf.gz"),
         vep_vci=join(workpath,"vep", "vep.vcf.gz.tbi")
     params:
@@ -21,7 +21,8 @@ rule vep:
     shell:
         """
         module load bcftools
-        bcftools view --max-alleles 2 {input.vcf} > {output.sub}
+        bcftools view --max-alleles 2 {input.vcf} -O z -o {output.sub}
+        tabix -p vcf (output.sub)
         mkdir -p {params.outdir}
         set +u
         module load VEP

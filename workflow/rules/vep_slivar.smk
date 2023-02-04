@@ -22,7 +22,6 @@ rule vep:
         """
         module load bcftools
         bcftools view --max-alleles 2 {input.vcf} -O z -o {output.sub}
-        tabix -p vcf (output.sub)
         mkdir -p {params.outdir}
         set +u
         module load VEP
@@ -39,7 +38,7 @@ rule slivar_01:
         slivar_vcf = join(workpath, "slivar",'slivar' + config['slivar']['gnomad_af1'] + ".vcf.gz"),
         slivar_vci = join(workpath, "slivar", 'slivar'  + config['slivar']['gnomad_af1'] + ".vcf.gz.tbi"),
         slivar_annot= join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af1'] + ".txt"),
-        plink_out = join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af1'])
+        bed = join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af1']+ '.bed'),
     params:
         rname = "slivar_01",
         outdir = join(workpath,"slivar"),
@@ -48,17 +47,18 @@ rule slivar_01:
         slivar_order = config['slivar']['slivar_order'],
         slivar_tool = config['slivar']['binary'],
         slivar_js = config['slivar']['slivar_js'],
-        gnomad_af = config['slivar']['gnomad_af1']
+        gnomad_af = config['slivar']['gnomad_af1'],
+        bed = join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af1'])
     shell:
         """
         mkdir -p {params.outdir}
         set +u
         SLIVAR_IMPACTFUL_ORDER={params.slivar_order}
         {params.slivar_tool} expr --js {params.slivar_js} -g {params.gnomad_db} --vcf {input.vep_vcf} --info "INFO.gnomad_popmax_af < {params.gnomad_af} && INFO.impactful" --pass-only > {output.unzipped_vcf}
-        module load plink/2
-        plink2 --make-bed --max-alleles 2 --out {output.plink_out} --rm-dup force-first --set-missing-var-ids @:# --vcf {output.unzipped_vcf} --vcf-half-call m
         module load bcftools
         bcftools +split-vep {output.unzipped_vcf} -f '%CHROM:%POS:%REF:%ALT\t%SYMBOL\t%Consequence\n' > {output.slivar_annot}
+        module load plink/2
+        plink2 --make-bed --max-alleles 2 --out {params.bed} --rm-dup force-first --set-missing-var-ids @:# --vcf {output.unzipped_vcf} --vcf-half-call m
         bgzip -c {output.unzipped_vcf} > {output.slivar_vcf}
         tabix -p vcf {output.slivar_vcf}
         """
@@ -71,7 +71,7 @@ rule slivar_05:
         slivar_vcf = join(workpath, "slivar",'slivar' + config['slivar']['gnomad_af2'] + ".vcf.gz"),
         slivar_vci = join(workpath, "slivar", 'slivar'  + config['slivar']['gnomad_af2'] + ".vcf.gz.tbi"),
         slivar_annot= join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af2'] + ".txt"),
-        plink_out = join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af2'])
+        bed = join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af2']+ '.bed')
     params:
         rname = "slivar_05",
         outdir = join(workpath,"slivar"),
@@ -80,17 +80,18 @@ rule slivar_05:
         slivar_order = config['slivar']['slivar_order'],
         slivar_tool = config['slivar']['binary'],
         slivar_js = config['slivar']['slivar_js'],
-        gnomad_af = config['slivar']['gnomad_af2']
+        gnomad_af = config['slivar']['gnomad_af2'],
+        bed = join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af2'])
     shell:
         """
         mkdir -p {params.outdir}
         set +u
         SLIVAR_IMPACTFUL_ORDER={params.slivar_order}
         {params.slivar_tool} expr --js {params.slivar_js} -g {params.gnomad_db} --vcf {input.vep_vcf} --info "INFO.gnomad_popmax_af < {params.gnomad_af} && INFO.impactful" --pass-only > {output.unzipped_vcf}
-        module load plink/2
-        plink2 --make-bed --max-alleles 2 --out {output.plink_out} --rm-dup force-first --set-missing-var-ids @:# --vcf {output.unzipped_vcf} --vcf-half-call m
         module load bcftools
         bcftools +split-vep {output.unzipped_vcf} -f '%CHROM:%POS:%REF:%ALT\t%SYMBOL\t%Consequence\n' > {output.slivar_annot}
+        module load plink/2
+        plink2 --make-bed --max-alleles 2 --out {params.bed} --rm-dup force-first --set-missing-var-ids @:# --vcf {output.unzipped_vcf} --vcf-half-call m
         bgzip -c {output.unzipped_vcf} > {output.slivar_vcf}
         tabix -p vcf {output.slivar_vcf}
         """
@@ -125,5 +126,7 @@ rule regenie_files:
         list_out2 = join(workpath,"regenie", config['slivar']['gnomad_af2'] + ".list"),
         mask_out1 = join(workpath,"regenie", config['slivar']['gnomad_af1'] + ".masks"),
         mask_out2 = join(workpath,"regenie", config['slivar']['gnomad_af2'] + ".masks")
+    params:
+        rname = "regenie_files",
     script:
         '/data/OpenOmics/istari/scipts/prepare_list_mask_files.R'

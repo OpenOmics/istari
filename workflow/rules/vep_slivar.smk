@@ -58,7 +58,7 @@ rule slivar_01:
         module load bcftools
         bcftools +split-vep {output.unzipped_vcf} -f '%CHROM:%POS:%REF:%ALT\t%SYMBOL\t%Consequence\n' > {output.slivar_annot}
         module load plink/2
-        plink2 --make-bed --max-alleles 2 --double-id --out {params.bed} --rm-dup force-first --set-missing-var-ids @:# --vcf {output.unzipped_vcf} --vcf-half-call m
+        plink2 --make-bed --max-alleles 2 --double-id --out {params.bed} --set-missing-var-ids @:# --vcf {output.unzipped_vcf} --vcf-half-call m
         bgzip -c {output.unzipped_vcf} > {output.slivar_vcf}
         tabix -p vcf {output.slivar_vcf}
         """
@@ -91,7 +91,7 @@ rule slivar_05:
         module load bcftools
         bcftools +split-vep {output.unzipped_vcf} -f '%CHROM:%POS:%REF:%ALT\t%SYMBOL\t%Consequence\n' > {output.slivar_annot}
         module load plink/2
-        plink2 --make-bed --max-alleles 2 --out {params.bed} --rm-dup force-first --set-missing-var-ids @:# --vcf {output.unzipped_vcf} --vcf-half-call m
+        plink2 --make-bed --max-alleles 2 --double-id --out {params.bed} --set-missing-var-ids @:# --vcf {output.unzipped_vcf} --vcf-half-call m
         bgzip -c {output.unzipped_vcf} > {output.slivar_vcf}
         tabix -p vcf {output.slivar_vcf}
         """

@@ -103,8 +103,8 @@ rule prep_annot_files:
         slivar_annot1= join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af1'] + ".txt"),
         slivar_annot2= join(workpath, "slivar", 'slivar'  + config['slivar']['gnomad_af2'] + ".txt")
     output:
-        out1 = join(workpath,"regenie", config['slivar']['gnomad_af1'] + ".annot"),
-        out2 = join(workpath,"regenie", config['slivar']['gnomad_af2'] + ".annot")
+        out1 = join(workpath,"regenie", 'slivar' + config['slivar']['gnomad_af1'] + ".annot"),
+        out2 = join(workpath,"regenie", 'slivar' + config['slivar']['gnomad_af2'] + ".annot")
     params:
         rname = "prep_annot_files",
     shell:
@@ -119,14 +119,19 @@ rule regenie_files:
     """ Creates list file and mask file from annotation file for regenie inputs
     """
     input:
-        in1 = join(workpath,"regenie",  config['slivar']['gnomad_af1'] + ".annot"),
-        in2 = join(workpath,"regenie", config['slivar']['gnomad_af2'] + ".annot")
+        in1 = join(workpath,"regenie",'slivar' + config['slivar']['gnomad_af1'] + ".annot"),
+        in2 = join(workpath,"regenie", 'slivar' + config['slivar']['gnomad_af2'] + ".annot")
     output:
-        list_out1 = join(workpath,"regenie", config['slivar']['gnomad_af1'] + ".list"),
-        list_out2 = join(workpath,"regenie", config['slivar']['gnomad_af2'] + ".list"),
-        mask_out1 = join(workpath,"regenie", config['slivar']['gnomad_af1'] + ".masks"),
-        mask_out2 = join(workpath,"regenie", config['slivar']['gnomad_af2'] + ".masks")
+        list_out1 = join(workpath,"regenie", 'slivar' + config['slivar']['gnomad_af1'] + ".list"),
+        list_out2 = join(workpath,"regenie", 'slivar' +  config['slivar']['gnomad_af2'] + ".list"),
+        mask_out1 = join(workpath,"regenie", 'slivar' + config['slivar']['gnomad_af1'] + ".masks"),
+        mask_out2 = join(workpath,"regenie", 'slivar' + config['slivar']['gnomad_af2'] + ".masks")
     params:
         rname = "regenie_files",
-    script:
-        '/data/OpenOmics/istari/scipts/prepare_list_mask_files.R'
+        wdir = join(workpath, "regenie"),
+        script = join(workpath, "workflow", "scripts", "prepare_list_mask_files.R")
+    shell:
+        """
+        module load R
+        Rscript {params.script} {params.wdir} {input.in1} {output.list_out1} {output.mask_out1} {input.in2} {output.list_out2} {output.mask_out2}
+        """

@@ -1,10 +1,20 @@
 #!/usr/bin/env Rscript
-
+library(dplyr)
+library(magrittr)
 library(data.table)
-
+# Parse command-line args
+args <- commandArgs(trailingOnly = TRUE)
+DIR <- args[1]
+FILE1 <- args[2]
+FILE2 <- args[3]
+FILE3 <- args[4]
+FILE4 <- args[5]
+FILE5 <- args[6]
+FILE6 <- args[7]
 #### first set of files 
 # read in annotation file
-annot_file1 = fread(vep_slivar.smk@input[['in1']], header = F)
+setwd(DIR)
+annot_file1 = fread(FILE1, header = F)
 
 # create list file
 set_file1 = annot_file1[,c('V1', 'V2')]
@@ -15,7 +25,7 @@ set_file1$SNPS = NA
 for(i in 1:nrow(set_file1)){
   set_file1$SNPS[i] = paste(annot_file1$V1[annot_file1$V2==annot_file1$V2[i]], collapse = ',')
 }
-fwrite(set_file1[,c('V2', 'CHR', 'BP','SNPS')], vep_slivar.smk@input[['list_out1']], row.names = F, col.names = F, sep = '\t', quote = F)
+fwrite(set_file1[,c('V2', 'CHR', 'BP','SNPS')], FILE2, row.names = F, col.names = F, sep = '\t', quote = F)
 
 #create mask file
 masks1=data.table(unique(annot_file1$V3))
@@ -35,13 +45,13 @@ Badness_df1 <- Badness1 %>%
   dplyr::group_by(Col1) %>%
   dplyr::summarise(Col2 = paste(Col2, collapse = ","))
 mask_df1=rbind(Missense_df1, Badness_df1, All_df1)
-write.table(mask_df1, vep_slivar.smk@input[['mask_out1']], row.names=F, col.names=F, quote=F, sep=' ')
+write.table(mask_df1, FILE3, row.names=F, col.names=F, quote=F, sep=' ')
 
 
 ## second set of files
 library(data.table)
 # read in annotation file
-annot_file2 = fread(vep_slivar.smk@input[['in2']], header = F)
+annot_file2 = fread(FILE4, header = F)
 
 # create list file
 set_file2 = annot_file2[,c('V1', 'V2')]
@@ -52,7 +62,7 @@ set_file2$SNPS = NA
 for(i in 1:nrow(set_file2)){
   set_file2$SNPS[i] = paste(annot_file2$V1[annot_file2$V2==annot_file2$V2[i]], collapse = ',')
 }
-fwrite(set_file2[,c('V2', 'CHR', 'BP','SNPS')], vep_slivar.smk@input[['list_out2']], row.names = F, col.names = F, sep = '\t', quote = F)
+fwrite(set_file2[,c('V2', 'CHR', 'BP','SNPS')], FILE5, row.names = F, col.names = F, sep = '\t', quote = F)
 
 #create mask file
 masks2=data.table(unique(annot_file2$V3))
@@ -72,4 +82,4 @@ Badness_df2 <- badness2 %>%
   dplyr::group_by(Col1) %>%
   dplyr::summarise(Col2 = paste(Col2, collapse = ","))
 mask_df2=rbind(Missense_df2, Badness_df2, All_df2)
-write.table(mask_df2, vep_slivar.smk@input[['mask_out2']], row.names=F, col.names=F, quote=F, sep=' ')
+write.table(mask_df2, FILE6, row.names=F, col.names=F, quote=F, sep=' ')

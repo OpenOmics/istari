@@ -1,13 +1,6 @@
 {
   "references": {
     "GENOME": "/data/NCBR/references/human/hg38_plus/Homo_sapiens_assembly38_plus.fasta",
-    "vep_assembly": "GRCh38",
-    "somalier":{
-    "exe": "/data/GRIS_NCBR/resources/software/somalier/somalier",
-		"somalier_sites": "/data/GRIS_NCBR/resources/software/somalier/sites.hg38.vcf.gz",
-		"somalier_labels": "/data/GRIS_NCBR/resources/software/somalier/ancestry-labels-1kg.tsv",
-		"somalier_1kg": "/data/GRIS_NCBR/resources/software/somalier/1kg-somalier/*.somalier"
-    }
+    "vep_assembly": "GRCh38"
   }
 }
-

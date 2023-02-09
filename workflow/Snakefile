@@ -19,6 +19,7 @@ configfile: 'config.json'                      # Generated from user input and c
 input_vcf  = config['options']['gvcf']
 covariates = config['options']['covariates']
 phenotype  = config['options']['phenotypes']
+#specifies what phenotypes to use in analysis
 phenos = ['BrainDamage_Severity','CombiWISE_Severity','SC_severity','MSDSS']
 workpath   = config['options']['output']
 SAMPLES    = []
@@ -32,8 +33,8 @@ with open(covariates, 'r') as fh:
 # the chromosomes to run
 chromosomes = ['X']
 chromosomes.extend(range(1, 23))
-CHROM= ['X'] + [str(i) for i in range(1,23)]
-#specifies what phenotypes to use in analysis
+
+
 
 # Final ouput files of the pipeline
 # Rule DAG built from listed here

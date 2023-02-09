@@ -12,21 +12,31 @@
     "vep": {
       "threads": "32",
       "mem": "6g",
-      "time": "18:00:00"
+      "time": "2-00:00:00"
     },
     "slivar_01": {
       "threads": "32",
       "mem": "6g",
-      "time": "18:00:00"
+      "time": "24:00:00"
     },
     "slivar_05": {
       "threads": "32",
       "mem": "6g",
-      "time": "18:00:00"
+      "time": "24:00:00"
+    },
+    "regenie_files": {
+      "threads": "32",
+      "mem": "6g",
+      "time": "24:00:00"
     },
     "GATK": {
     "threads": "4",
     "mem": "48g",
     "time": "18:00:00"
-  }
+  },
+  "regenie": {
+  "threads": "70",
+  "mem": "4g",
+  "time": "24:00:00"
+}
 }

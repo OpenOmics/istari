@@ -28,7 +28,7 @@
 	},
 
 	"regenie": {
-		"covarColList": "EV{1:10},Sex,Data",
+		"covarColList": "PC{1:10},sex",
 		"phenoColList": "BrainDamage_Severity,CombiWISE_Severity,SC_severity,MSDSS",
 		"step1_bsize" : "1000",
 		"step2_minMAC" : "5",

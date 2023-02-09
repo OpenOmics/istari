@@ -19,15 +19,21 @@ configfile: 'config.json'                      # Generated from user input and c
 input_vcf  = config['options']['gvcf']
 covariates = config['options']['covariates']
 phenotype  = config['options']['phenotypes']
+phenos = ['BrainDamage_Severity','CombiWISE_Severity','SC_severity','MSDSS']
 workpath   = config['options']['output']
 SAMPLES    = []
+# gets samples from covariate files
 with open(covariates, 'r') as fh:
     header = next(fh)
     for line in fh:
         sample = line.strip().split('\t')[0]
         SAMPLES.append(sample)
-#chromosomes = ['X']
-#chromosomes.extend(range(1, 23))
+
+# the chromosomes to run
+chromosomes = ['X']
+chromosomes.extend(range(1, 23))
+CHROM= ['X'] + [str(i) for i in range(1,23)]
+#specifies what phenotypes to use in analysis
 
 # Final ouput files of the pipeline
 # Rule DAG built from listed here
@@ -46,34 +52,35 @@ rule all:
         join(workpath, "slivar",'slivar' + config['slivar']['gnomad_af1'] + ".vcf.gz"),
         join(workpath, "slivar", 'slivar'  + config['slivar']['gnomad_af1'] + ".vcf.gz.tbi"),
         join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af1'] + ".txt"),
-        join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af1']),
+        join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af1'] + '.bed'),
         join(workpath, "slivar",'slivar' + config['slivar']['gnomad_af2'] + ".vcf.gz"),
         join(workpath, "slivar", 'slivar'  + config['slivar']['gnomad_af2'] + ".vcf.gz.tbi"),
-        join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af2']),
+        join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af2']+ '.bed'),
         join(workpath, "slivar", 'slivar' + config['slivar']['gnomad_af2'] + ".txt"),
         # prep annotation, list, and mask files for regenie
-        join(workpath,"regenie", config['slivar']['gnomad_af1'] + ".annot"),
-        join(workpath,"regenie", config['slivar']['gnomad_af2'] + ".annot"),
-        join(workpath,"regenie", config['slivar']['gnomad_af1'] + ".list"),
-        join(workpath,"regenie", config['slivar']['gnomad_af2'] + ".list"),
-        join(workpath,"regenie", config['slivar']['gnomad_af1'] + ".masks"),
-        join(workpath,"regenie", config['slivar']['gnomad_af2'] + ".masks"),
+        join(workpath,"regenie", 'slivar' + config['slivar']['gnomad_af1'] + ".annot"),
+        join(workpath,"regenie", 'slivar' + config['slivar']['gnomad_af2'] + ".annot"),
+        join(workpath,"regenie", 'slivar' + config['slivar']['gnomad_af1'] + ".list"),
+        join(workpath,"regenie", 'slivar' + config['slivar']['gnomad_af2'] + ".list"),
+        join(workpath,"regenie", 'slivar' + config['slivar']['gnomad_af1'] + ".masks"),
+        join(workpath,"regenie", 'slivar' + config['slivar']['gnomad_af2'] + ".masks"),
         # filtering QC for regenie step 1
-      #  join(workpath, "QC", "cleaned.vcf.gz"),
-      #  join(workpath, "QC", "cleaned.vcf.gz.tbi"),
-      #  join(workpath, "QC", 'geno' + config['QC']['plink_filters']['geno'] + 'maf' + config['QC']['plink_filters']['maf'] + '.bed'),
-      #  join(workpath, "regenie", 'filtered.bed'),
-      #  join(workpath, "regenie", config['slivar']['gnomad_af1'] + '.bed'),
-      #  join(workpath, "regenie", config['slivar']['gnomad_af1'] + '.bed'),
+        join(workpath, "QC", "cleaned.vcf.gz"),
+        join(workpath, "QC", "cleaned.vcf.gz.tbi"),
+        join(workpath, "QC", 'geno' + config['QC']['plink_filters']['geno'] + 'maf' + config['QC']['plink_filters']['maf'] + '.bed'),
+        join(workpath, "QC", "ld_filtered" + '.bed'),
+        join(workpath, "regenie", 'step1' +'.bed'),
+        # outputs for regenie step 2
+        join(workpath, "regenie", 'step2.' + config['slivar']['gnomad_af1'] + '.bed'),
+        join(workpath, "regenie", 'step2.' + config['slivar']['gnomad_af2'] + '.bed'),
         # regenie outputs
-      #  join(workpath, "regenie", 'step1'),
-      #  expand(join(workpath, "regenie", 'step2_01_{chr}.regenie'), chr=chromosomes),
-       # expand(join(workpath, "regenie", 'step2_05_{chr}.regenie'), chr=chromosomes),
+        join(workpath,"regenie", 'step1_pred.list'),
+        expand(join(workpath, "regenie", 'step2_01_{pheno}.regenie'), pheno=phenos),
+        expand(join(workpath, "regenie", 'step2_05_{pheno}.regenie'), pheno=phenos),
 
 
 # Import rules
 include: join(workpath, "workflow", "rules", "somalier.smk")
 include: join(workpath, "workflow", "rules", "vep_slivar.smk")
-#include: join(workpath, "workflow", "rules", "filtering.smk")
-#include: join(workpath, "workflow", "rules", "regenie.smk")
-# extract sites
+include: join(workpath, "workflow", "rules", "filtering.smk")
+include: join(workpath, "workflow", "rules", "regenie.smk")

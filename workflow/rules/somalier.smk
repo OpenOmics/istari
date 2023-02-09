@@ -48,7 +48,7 @@ rule extract_info:
     @Input:
         Outputs from somalier related (5th column) and somalier ancestry (columns 9-18) tsv files
     @Output:
-        Updated covariate file with sex and ancestry information
+        Updated covariate file with sex and ancestry information (PCs 1-10)
     """
     input:
         sex = join(workpath, "somalier","relatedness.samples.tsv"),

@@ -1,6 +1,5 @@
 # run step 1 and step 2 of regenie
-# Result folders
-# Run each chromosome separately (recommended for regenie step2 with many variants)
+# runs all chromosomes at same time for step 2
 
 rule regenie:
     input:

@@ -2,6 +2,9 @@
 # runs all chromosomes at same time for step 2
 
 rule regenie:
+    """
+    Runs regenie step 1 and step 2
+    """
     input:
         annot_01 = join(workpath,"regenie", 'slivar' + config['slivar']['gnomad_af1'] + ".annot"),
         annot_05 = join(workpath,"regenie", 'slivar' + config['slivar']['gnomad_af2'] + ".annot"),

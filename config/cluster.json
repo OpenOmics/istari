@@ -9,6 +9,11 @@
     "somalier": {
         "time": "12:00:00"
     },
+    "extract_info": {
+      "threads": "4",
+      "mem": "6g",
+      "time": "6:00:00"
+    },
     "vep": {
       "threads": "32",
       "mem": "6g",
@@ -25,17 +30,17 @@
       "time": "24:00:00"
     },
     "regenie_files": {
-      "threads": "32",
+      "threads": "4",
       "mem": "6g",
-      "time": "24:00:00"
+      "time": "6:00:00"
     },
     "GATK": {
     "threads": "4",
     "mem": "48g",
-    "time": "18:00:00"
+    "time": "24:00:00"
   },
   "regenie": {
-  "threads": "70",
+  "threads": "32",
   "mem": "4g",
   "time": "24:00:00"
 }

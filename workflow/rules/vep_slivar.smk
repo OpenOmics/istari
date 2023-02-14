@@ -4,8 +4,6 @@ rule vep:
     """
     Takes vcf file, filter out anything
     but biallelic SNPs and annotates using VEP
-    @Input: multi-sample jointly-called VCF file
-    @Output: VEP and HTML output
     """
     input:
         vcf = input_vcf
@@ -31,6 +29,12 @@ rule vep:
         """
 
 rule slivar_01:
+    """
+    Takes vep.vcf and filters for variants deemed impactful
+    by slivar using annotations from VEP and population
+    AF filter of less than or equal to 0.01 in gnomAD.
+    Converts vcf to BED using plink.
+    """
     input:
         vep_vcf = join(workpath, "vep", "vep.vcf.gz")
     output:
@@ -64,6 +68,12 @@ rule slivar_01:
         """
 
 rule slivar_05:
+    """
+    Takes vep.vcf and filters for variants deemed impactful
+    by slivar using annotations from VEP and population
+    AF filter of less than or equal to 0.05 in gnomAD.
+    Converts vcf to BED using plink.
+    """
     input:
         vep_vcf = join(workpath, "vep", "vep.vcf.gz")
     output:
@@ -97,7 +107,9 @@ rule slivar_05:
         """
 
 rule regenie_files:
-    """ Creates list file and mask file from annotation file for regenie inputs
+    """
+    Creates list file and mask file from
+    annotation file for regenie inputs
     """
     input:
         in1 = join(workpath,"slivar",'slivar' + config['slivar']['gnomad_af1'] + ".txt"),

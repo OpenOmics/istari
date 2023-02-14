@@ -2,7 +2,7 @@
 
 rule GATK:
     """
-    Takes merged VCF file from GLnexus Output.
+    Takes merged gVCF file.
     @Input:
         Multi-sample joint VCF file (scatter)
     @Output:
@@ -31,11 +31,15 @@ rule GATK:
 
 rule plink:
     """
-    Takes VCF file, converts to plink format and filters for missing genotype rate, removes chromosome M (regenie will produce error if included), and sets vcf half calls as missing
+    Takes VCF file, converts to plink format and
+    filters for missing genotype rate, removes
+    chromosome M (regenie will produce error if included),
+    and sets vcf half calls as missing
     @Input:
         Multi-sample joint VCF file
     @Output:
-        filtered plink file for step 1 regenie, step 2 regenie files for gnomad AF choices
+        filtered plink file for step 1 regenie, step 2
+        regenie files for gnomAD AF choices
     """
     input:
         cleaned_vcf = join(workpath, "QC", "cleaned.vcf.gz"),

@@ -53,9 +53,9 @@ This site is a living document, created for and by members like you. istari is m
 ## References
 <sup>**1.**  Kurtzer GM, Sochat V, Bauer MW (2017). Singularity: Scientific containers for mobility of compute. PLoS ONE 12(5): e0177459.</sup>  
 <sup>**2.**  Koster, J. and S. Rahmann (2018). "Snakemake-a scalable bioinformatics workflow engine." Bioinformatics 34(20): 3600.</sup>  
-<sup>**3.** Mbatchou, J., Barnard, L., Backman, J., Marcketta, A., Kosmicki, J. A., Ziyatdinov, A., et al. (2021). Computationally efficient whole-genome regression for quantitative and binary traits. Nat. Genet. 53 (7), 1097–1103.</sup>
+<sup>**3.** Mbatchou, J., Barnard, L., Backman, J., Marcketta, A., Kosmicki, J. A., Ziyatdinov, A., et al. (2021). Computationally efficient whole-genome regression for quantitative and binary traits. Nat. Genet. 53 (7), 1097–1103.</sup>   
 <sup>**4.** Pedersen, B.S., Bhetariya, P.J., Brown, J., Kravitz, S.N., Marth, G., Jensen, R.L., Bronner, M.P., Underhill, H.R., and Quinlan, A.R. (2020). Somalier: rapid relatedness estimation for cancer and germline studies using efficient genome sketches.Genome Med. 12, 62.</sup>
-<sup>**5.** McLaren W, Gil L, Hunt SE, Riat HS, Ritchie GR, Thormann A, Flicek P, Cunningham F. (2016). The Ensembl Variant Effect Predictor. Genome Biology Jun 6;17(1):122.</sup>
-<sup>**6.** Karczewski, K.J., Francioli, L.C., Tiao, G. et al. (2020). The mutational constraint spectrum quantified from variation in 141,456 humans. Nature 581, 434–443.</sup>
+<sup>**5.** McLaren W, Gil L, Hunt SE, Riat HS, Ritchie GR, Thormann A, Flicek P, Cunningham F. (2016). The Ensembl Variant Effect Predictor. Genome Biology Jun 6;17(1):122.</sup> 
+<sup>**6.** Karczewski, K.J., Francioli, L.C., Tiao, G. et al. (2020). The mutational constraint spectrum quantified from variation in 141,456 humans. Nature 581, 434–443.</sup>   
 <sup>**7.** Purcell S, Neale B, Todd-Brown K, Thomas L, Ferreira M, Bender D, Maller J, Sklar P, de Bakker P, Daly MJ, Sham PC (2007) PLINK: A Tool Set for Whole-Genome and Population-Based Linkage Analyses. American Journal of Human Genetics, 81.</sup>
-<sup>**8.** Chang CC, Chow CC, Tellier LCAM, Vattikuti S, Purcell SM, Lee JJ (2015) Second-generation PLINK: rising to the challenge of larger and richer datasets. GigaScience, 4.</sup>
+<sup>**8.** Chang CC, Chow CC, Tellier LCAM, Vattikuti S, Purcell SM, Lee JJ (2015) Second-generation PLINK: rising to the challenge of larger and richer datasets. GigaScience, 4.</sup>   
